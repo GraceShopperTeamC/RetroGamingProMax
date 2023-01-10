@@ -8,12 +8,11 @@ import { useDispatch } from "react-redux";
 import { me } from '../store/store';
 
 const App = () => {
-
     const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(me());
-  }, []);
+    useEffect(() => {
+        dispatch(me())
+    }, []);
 
     return (
         <>
@@ -23,10 +22,7 @@ const App = () => {
             <Routes>
                 <Route path="/*" element={<Home />} />
                 <Route to="/home" element={<Home />} />
-                <Route
-                    path="/login"
-                    element={<AuthForm name="login" displayName="Login" />}
-                />
+                <Route path="/login" element={<AuthForm name="login" displayName="Login" />}/>
             </Routes>
         </>
     );
