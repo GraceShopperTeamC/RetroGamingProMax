@@ -3,9 +3,10 @@ import Navbar from "./Navbar";
 import { Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import AuthForm from "./AuthForm";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { me } from '../store/store';
+import { loadStripe } from '@stripe/stripe-js';
 
 const App = () => {
     const dispatch = useDispatch()
