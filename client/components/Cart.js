@@ -193,7 +193,7 @@ export const Cart = () => {
                                   </h2>
                                   <div id="cartTest">
                                   <h3 className="productAtt">Price:{product.price}</h3>
-                                  <h3 className="productAtt">Quantity:{product.quantity}</h3>
+                                  <h3 className="productAtt">Qty:{product.quantity}</h3>
                                   <button
                                       onClick={() =>
                                           handleDecreaseQuantity(
