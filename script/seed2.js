@@ -1,6 +1,6 @@
 const {
     db,
-    models: { User, Product, Cart },
+    models: { User, Product, Cart, Order },
 } = require("../server/db");
 const _ = require("lodash");
 const { faker } = require("@faker-js/faker");
@@ -776,11 +776,17 @@ async function seed() {
             phone: faker.phone.number(),
             isAdmin: true
         })
+        await Order.create({
+            userId:1,
+            cartId:1,
+            total:100,
+            completed:false
+        })
         await Cart.create({
             userId:1,
             productId:1,
             quantity:1,
-            completed: false
+            orderId: 1
         })
 }
 
