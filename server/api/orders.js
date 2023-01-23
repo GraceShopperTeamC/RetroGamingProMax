@@ -16,7 +16,7 @@ router.get("/incompleteOrders", async (req, res, next) => {
     try {
         const orders = await Order.findAll({
             where:{
-                userId : req.headers.userid || null,
+                userId : req.headers.authid || null,
                 completed: false
             },
         });

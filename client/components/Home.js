@@ -177,10 +177,6 @@ const Home = () => {
             <div id="products" style={simpleStyle}>
                 {currentTableData && currentTableData.length
                     ? currentTableData.map((product) => {
-                          console.log(
-                              "THIS IS THE ITEMS FOR THE CURRENT PAGE ",
-                              product
-                          );
                           return (
                               <div
                                   className="product"

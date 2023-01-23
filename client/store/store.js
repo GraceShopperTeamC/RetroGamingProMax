@@ -22,7 +22,7 @@ const store = configureStore({
         allCartDatabase: allCartDatabaseSlice,
         orderHistory: orderHistorySlice,
         order: orderSlice,
-        sinlgeOrder: singleOrderSlice
+        singleOrder: singleOrderSlice
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

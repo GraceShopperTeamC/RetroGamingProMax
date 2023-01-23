@@ -14,20 +14,6 @@ export const getOpenOrders = createAsyncThunk("openOrder", async (userId) => {
         console.log("error has occurred, check console", err.message);
     }
 });
-export const addOrder = createAsyncThunk(
-    "addOrder",
-    async ({ userId, total }) => {
-        try {
-            const { data } = await axios.post("/api/orders", {
-                userId,
-                total,
-            });
-            return data;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-);
 
 const orderSlice = createSlice({
     name: "orderSlice",
@@ -35,9 +21,6 @@ const orderSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getOpenOrders.fulfilled, (state, action) => {
-            return action.payload;
-        });
-        builder.addCase(addOrder.fulfilled, (state, action) => {
             return action.payload;
         });
     },

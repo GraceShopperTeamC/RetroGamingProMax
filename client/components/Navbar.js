@@ -11,6 +11,7 @@ import {
     checkoutCartSlice,
     selectGetCart,
 } from "../slices/cartSlice";
+import { getIncompleteOrder } from "../slices/singleOrderSlice";
 
 const Navbar = () => {
     const cartNum = useSelector(selectGetCart);
@@ -34,6 +35,7 @@ const Navbar = () => {
 
     useEffect(() => {
         if (userId) dispatch(getSingleUser(userId));
+        if (userId) dispatch(getIncompleteOrder(userId))
         const localSt = localStorage.getItem("cart");
         if (localSt) {
             const items = JSON.parse(localStorage.getItem("cart"));

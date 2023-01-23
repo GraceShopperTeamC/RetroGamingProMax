@@ -17,8 +17,8 @@ import EditProductForm from "./EditProductForm";
 import {
     getIncompleteOrder,
     selectSingleOrder,
+   addOrder 
 } from "../slices/singleOrderSlice";
-import { addOrder } from "../slices/orderSlice";
 
 const SingleProduct = () => {
     const [quantity, setQuantity] = useState(1);
@@ -33,6 +33,9 @@ const SingleProduct = () => {
     const singleUser = useSelector(selectSingleUser);
     const incompleteOrder = useSelector(selectSingleOrder)
 
+    if(!Object.keys(incompleteOrder).length){
+         dispatch(addOrder({userId}))
+    }
     const {
         productName,
         category,
@@ -45,7 +48,6 @@ const SingleProduct = () => {
     useEffect(() => {
         dispatch(getSingleProduct(productId));
         if (userId) dispatch(getMyHomeCart(userId));
-        if (userId) dispatch(getIncompleteOrder(userId))
     }, [dispatch, userId]);
 
     useEffect(() => {
@@ -73,12 +75,15 @@ const SingleProduct = () => {
         return false;
     };
 
-    const handleAddToCart = (quantity, userId, productId, userCart, incompleteOrder) => {
+    const handleAddToCart = async(quantity, userId, productId, userCart, incompleteOrder) => {
+        console.log("THIS IS INCOMPLETE ORDER ON FIRE:",incompleteOrder)
         if (isLoggedIn && userId && isAlreadyInCart(userCart, productId)) {
             const [id, cartQuantity] = isAlreadyInCart(userCart, productId);
             quantity += cartQuantity;
             dispatch(editProductInDBCart({ id, userId, productId, quantity }));
-        } else if (isLoggedIn && userId && incompleteOrder) {
+        // } else if (isLoggedIn && userId && Object.keys(incompleteOrder).length) {
+        //     dispatch(addProductToDBCart({ userId, productId, quantity, orderId:incompleteOrder.id }));
+        } else if (isLoggedIn && userId ) {
             dispatch(addProductToDBCart({ userId, productId, quantity, orderId:incompleteOrder.id }));
         } else {
             const newProduct = JSON.parse(JSON.stringify(singleProduct));
@@ -112,7 +117,8 @@ const SingleProduct = () => {
                                                 quantity,
                                                 userId,
                                                 productId,
-                                                cart
+                                                cart, 
+                                                incompleteOrder
                                             )
                                         }
                                     >

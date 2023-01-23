@@ -6,6 +6,7 @@ export const addProductToDBCart = createAsyncThunk(
     "cart",
     async ({ quantity, userId, productId, orderId }) => {
         try {
+            console.log("this is orderId from thunk to add to cart DB", orderId)
             let { data } = await axios.post(`http://localhost:8080/api/cart`, {
                 quantity,
                 userId,
@@ -73,13 +74,13 @@ export const editProductInDBCart = createAsyncThunk(
 );
 export const checkoutCart = createAsyncThunk(
     "checkoutCart",
-    async ({ id, userId, productId, quantity, completed }) => {
+    async ({ id, userId, productId, quantity}) => {
         try {
+            console.log("THIS IS FROM THE CHECKOUT CART ITEMS",id, userId,productId, quantity )
             const { data } = await axios.put(`/api/cart/${id}`, {
                 userId,
                 productId,
                 quantity,
-                completed,
             });
             return data;
         } catch (err) {
@@ -130,6 +131,7 @@ const cartSlice = createSlice({
         builder.addCase(getMyCart.fulfilled, (state, action) => {
             return action.payload.map((cart) => {
                 cart.product["quantity"] = cart.quantity;
+                cart.product["orderId"] = cart.orderId;
                 cart.product["cartId"] = cart.id;
                 return cart.product;
             })

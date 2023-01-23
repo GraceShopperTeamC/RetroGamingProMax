@@ -19,6 +19,7 @@ import {
 } from "../slices/cartSlice";
 import { addUserAsync } from "../slices/allUsersSlice";
 import { editSingleProduct } from "../slices/singleProductSlice";
+import { checkoutOrder } from "../slices/singleOrderSlice";
 
 export const Cart = () => {
     const dispatch = useDispatch();
@@ -152,17 +153,29 @@ export const Cart = () => {
         }
     };
 
-    const handleCheckout = (cart, userId) => {
+    const handleCheckout = (cart, userId, cartTotal) => {
         localStorage.setItem("cart", "[]");
         dispatch(checkoutCartSlice());
         if (isLoggedIn) {
-            let completed = true;
             cart.map((item) => {
-                let id = item.cartId;
                 let productId = item.id;
                 let quantity = item.quantity;
+                console.log("This is the item.orderId", item.orderId)
                 dispatch(
-                    checkoutCart({ id, userId, productId, quantity, completed })
+                    checkoutOrder({
+                        id: item.orderId,
+                        userId,
+                        total: cartTotal,
+                        completed: true,
+                    })
+                );
+                dispatch(
+                    checkoutCart({
+                        id: item.cartId,
+                        userId,
+                        productId,
+                        quantity,
+                    })
                 );
                 let stockQuantity = item.stockQuantity - quantity;
                 dispatch(editSingleProduct({ id: item.id, stockQuantity }));
@@ -192,44 +205,48 @@ export const Cart = () => {
                                       </Link>
                                   </h2>
                                   <div id="cartTest">
-                                  <h3 className="productAtt">Price:{product.price}</h3>
-                                  <h3 className="productAtt">Quantity:{product.quantity}</h3>
-                                  <button
-                                      onClick={() =>
-                                          handleDecreaseQuantity(
-                                              localCart,
-                                              product
-                                          )
-                                      }
-                                      id='remove'
-                                      className='productButtons'
-                                  >
-                                     - 
-                                  </button>
-                                  <button
-                                      onClick={() =>
-                                          handleIncreaseQuantity(
-                                              localCart,
-                                              product
-                                          )
-                                      }
-                                      id='add'
-                                      className="productButtons"
-                                  >
-                                  +   
-                                  </button>
-                                  {/* <h3 className="productAtt">
+                                      <h3 className="productAtt">
+                                          Price:{product.price}
+                                      </h3>
+                                      <h3 className="productAtt">
+                                          Quantity:{product.quantity}
+                                      </h3>
+                                      <button
+                                          onClick={() =>
+                                              handleDecreaseQuantity(
+                                                  localCart,
+                                                  product
+                                              )
+                                          }
+                                          id="remove"
+                                          className="productButtons"
+                                      >
+                                          -
+                                      </button>
+                                      <button
+                                          onClick={() =>
+                                              handleIncreaseQuantity(
+                                                  localCart,
+                                                  product
+                                              )
+                                          }
+                                          id="add"
+                                          className="productButtons"
+                                      >
+                                          +
+                                      </button>
+                                      {/* <h3 className="productAtt">
                                       Total:{product.price * product.quantity}
                                   </h3> */}
-                                  <button
-                                      onClick={() =>
-                                          handleDelete(localCart, product)
-                                      }
-                                      id='remove-all'
-                                      className='productButtons'
-                                  >
-                                 x 
-                                  </button>
+                                      <button
+                                          onClick={() =>
+                                              handleDelete(localCart, product)
+                                          }
+                                          id="remove-all"
+                                          className="productButtons"
+                                      >
+                                          x
+                                      </button>
                                   </div>
                               </div>
                           );
@@ -282,11 +299,13 @@ export const Cart = () => {
                     onChange={(e) => setPhone(e.target.value)}
                 />
 
-                <button type="submit" className="productButtons">Update Information</button>
-            </form>
-                <button id='checkout' onClick={() => handleCheckout(cart, userId)}>
-                    Checkout
+                <button type="submit" className="productButtons">
+                    Update Information
                 </button>
+            </form>
+            <button id="checkout" onClick={() => handleCheckout(cart, userId, cartTotal)}>
+                Checkout
+            </button>
         </div>
     );
 };
