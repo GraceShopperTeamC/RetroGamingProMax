@@ -14,6 +14,11 @@ import {
 } from "../slices/cartSlice";
 import { selectSingleUser } from "../slices/singleUserSlice";
 import EditProductForm from "./EditProductForm";
+import {
+    getIncompleteOrder,
+    selectSingleOrder,
+} from "../slices/singleOrderSlice";
+import { addOrder } from "../slices/orderSlice";
 
 const SingleProduct = () => {
     const [quantity, setQuantity] = useState(1);
@@ -26,6 +31,7 @@ const SingleProduct = () => {
     const userId = useSelector((state) => state.auth.me.id);
     const cart = useSelector(selectGetCart);
     const singleUser = useSelector(selectSingleUser);
+    const incompleteOrder = useSelector(selectSingleOrder)
 
     const {
         productName,
@@ -39,6 +45,7 @@ const SingleProduct = () => {
     useEffect(() => {
         dispatch(getSingleProduct(productId));
         if (userId) dispatch(getMyHomeCart(userId));
+        if (userId) dispatch(getIncompleteOrder(userId))
     }, [dispatch, userId]);
 
     useEffect(() => {
@@ -66,13 +73,13 @@ const SingleProduct = () => {
         return false;
     };
 
-    const handleAddToCart = (quantity, userId, productId, userCart) => {
+    const handleAddToCart = (quantity, userId, productId, userCart, incompleteOrder) => {
         if (isLoggedIn && userId && isAlreadyInCart(userCart, productId)) {
             const [id, cartQuantity] = isAlreadyInCart(userCart, productId);
             quantity += cartQuantity;
             dispatch(editProductInDBCart({ id, userId, productId, quantity }));
-        } else if (isLoggedIn && userId) {
-            dispatch(addProductToDBCart({ userId, productId, quantity }));
+        } else if (isLoggedIn && userId && incompleteOrder) {
+            dispatch(addProductToDBCart({ userId, productId, quantity, orderId:incompleteOrder.id }));
         } else {
             const newProduct = JSON.parse(JSON.stringify(singleProduct));
             newProduct["quantity"] = quantity;
@@ -118,19 +125,19 @@ const SingleProduct = () => {
                                 <div className="quantityCounter">
                                     <br />
                                     <span className="quantityOutput">
-                                            {" "}
-                                           QTY: {quantity}{" "}
+                                        {" "}
+                                        QTY: {quantity}{" "}
                                         <div className="btn-container">
                                             <button
                                                 className="control__btn"
                                                 onClick={decrease}
-                                                >
+                                            >
                                                 -
                                             </button>
                                             <button
                                                 className="control__btn"
                                                 onClick={increase}
-                                                >
+                                            >
                                                 +
                                             </button>
                                         </div>

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {
-    models: { Cart, Product },
+    models: { Cart, Product, Order },
 } = require("../db");
 
 router.get("/", async (req, res, next) => {
@@ -13,13 +13,22 @@ router.get("/", async (req, res, next) => {
 });
 router.get("/myCart", async (req, res, next) => {
     try {
-        console.log(req.headers)
+        console.log(req.headers);
         const cart = await Cart.findAll({
-            where:{
-                userId:req.headers.authid || null, 
-                completed: false
+            where: {
+                userId: req.headers.authid || null,
             },
-            include: Product
+            include: [
+                {
+                    model: Product,
+                },
+                {
+                    model: Order,
+                    where: {
+                        completed: false,
+                    },
+                },
+            ],
         });
         res.json(cart);
     } catch (err) {
@@ -28,13 +37,22 @@ router.get("/myCart", async (req, res, next) => {
 });
 router.get("/myHomeCart", async (req, res, next) => {
     try {
-        console.log(req.headers)
+        console.log(req.headers);
         const cart = await Cart.findAll({
-            where:{
-                userId:req.headers.authid || null, 
-                completed: false
+            where: {
+                userId: req.headers.authid || null,
             },
-            include: Product
+            include: [
+                {
+                    model: Product,
+                },
+                {
+                    model: Order,
+                    where: {
+                        completed: false,
+                    },
+                },
+            ],
         });
         res.json(cart);
     } catch (err) {
@@ -43,13 +61,22 @@ router.get("/myHomeCart", async (req, res, next) => {
 });
 router.get("/myOrders", async (req, res, next) => {
     try {
-        console.log(req.headers)
+        console.log(req.headers);
         const cart = await Cart.findAll({
-            where:{
-                userId:req.headers.authid || null, 
-                completed: true
+            where: {
+                userId: req.headers.authid || null,
             },
-            include: Product
+            include: [
+                {
+                    model: Product,
+                },
+                {
+                    model: Order,
+                    where: {
+                        completed: true,
+                    },
+                },
+            ],
         });
         res.json(cart);
     } catch (err) {
@@ -86,7 +113,7 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
     try {
-        console.log(req.params.id)
+        console.log(req.params.id);
         const cart = await Cart.findByPk(req.params.id);
         cart.destroy();
         res.send(cart);

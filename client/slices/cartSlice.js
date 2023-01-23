@@ -4,12 +4,13 @@ import axios from "axios";
 const initialState = [];
 export const addProductToDBCart = createAsyncThunk(
     "cart",
-    async ({ quantity, userId, productId }) => {
+    async ({ quantity, userId, productId, orderId }) => {
         try {
             let { data } = await axios.post(`http://localhost:8080/api/cart`, {
                 quantity,
                 userId,
                 productId,
+                orderId
             });
             return data;
         } catch (err) {

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = [];
-export const getMyOrders = createAsyncThunk("myOrders", async (userId) => {
+const initialState ={} 
+export const getIncompleteOrder = createAsyncThunk("singleOrder", async (userId) => {
     try {
         let { data } = await axios.get(
-            `http://localhost:8080/api/cart/myOrders`,
+            `http://localhost:8080/api/orders/incompleteOrders`,
             { headers: { authid: userId } }
         );
         return data;
@@ -15,20 +15,20 @@ export const getMyOrders = createAsyncThunk("myOrders", async (userId) => {
     }
 });
 
-const orderHistorySlice = createSlice({
-    name: "Order History Slice",
+const singleOrderSlice = createSlice({
+    name:"singleOrderSlice" ,
     initialState,
     reducers: {
     },
     extraReducers: (builder) => {
-        builder.addCase(getMyOrders.fulfilled, (state, action) => {
+        builder.addCase(getIncompleteOrder.fulfilled, (state, action) => {
             return action.payload 
         });
     },
 });
 
-export const selectOrderHistory = (state) => {
-    return state.orderHistory;
+export const selectSingleOrder = (state) => {
+    return state.singleOrder;
 };
 
-export default orderHistorySlice.reducer;
+export default singleOrderSlice.reducer;

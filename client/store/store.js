@@ -8,6 +8,8 @@ import allUsersSlice from "../slices/allUsersSlice";
 import cartSlice from "../slices/cartSlice";
 import allCartDatabaseSlice from "../slices/allCartDatabaseSlice";
 import orderHistorySlice from "../slices/orderHistorySlice";
+import orderSlice from "../slices/orderSlice";
+import singleOrderSlice from "../slices/singleOrderSlice";
 
 const store = configureStore({
     reducer: {
@@ -18,7 +20,9 @@ const store = configureStore({
         singleUser: singleUserSlice,
         cart: cartSlice,
         allCartDatabase: allCartDatabaseSlice,
-        orderHistory: orderHistorySlice
+        orderHistory: orderHistorySlice,
+        order: orderSlice,
+        sinlgeOrder: singleOrderSlice
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

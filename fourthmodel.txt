@@ -1,0 +1,5 @@
+When user lands on single proudct page >> 
+
+pull orders where completed is false.
+    if there is one, use that for orderId on puts and adds.
+    if there isn't one, create new order with empty total(BEDORE THEY ADD ANYTHING TO CART??), add to cart with that orderId
