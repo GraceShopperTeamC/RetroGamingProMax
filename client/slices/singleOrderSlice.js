@@ -30,7 +30,7 @@ export const addOrder = createAsyncThunk(
     }
 );
 export const checkoutOrder = createAsyncThunk(
-    "editOrder",
+    "checkoutOrder",
     async ({id, userId, total, completed }) => {
         try {
             const { data } = await axios.put(`/api/orders/${id}`, {

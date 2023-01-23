@@ -33,9 +33,6 @@ const SingleProduct = () => {
     const singleUser = useSelector(selectSingleUser);
     const incompleteOrder = useSelector(selectSingleOrder)
 
-    if(!Object.keys(incompleteOrder).length){
-         dispatch(addOrder({userId}))
-    }
     const {
         productName,
         category,
@@ -48,7 +45,10 @@ const SingleProduct = () => {
     useEffect(() => {
         dispatch(getSingleProduct(productId));
         if (userId) dispatch(getMyHomeCart(userId));
-    }, [dispatch, userId]);
+    if(!Object.keys(incompleteOrder).length){
+         dispatch(addOrder({userId}))
+    }
+    }, [dispatch, userId, incompleteOrder]);
 
     useEffect(() => {
         if (!isLoggedIn) localStorage.setItem("cart", JSON.stringify(cart));
